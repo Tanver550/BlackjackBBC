@@ -4,6 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/*
+deck testing. this is for the deck from which cards are handed out. makes sure the deck is correct so scores are legitamate
+ */
+
 public class DeckTest {
     @Test
     void testDeckSize() {

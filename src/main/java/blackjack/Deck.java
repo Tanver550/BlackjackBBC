@@ -33,7 +33,6 @@ public class Deck {
         return cards.remove(cards.size() - 1);
     }
 
-    // Add this method to get the number of cards left in the deck
     public int cardsLeft() {
         return cards.size();
     }

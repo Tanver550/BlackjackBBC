@@ -17,7 +17,7 @@ public class Player {
     public void addCard(Card card) {
         hand.add(card);
         score += card.getValue();
-        if (score > 21) { // Adjust for Aces
+        if (score > 21) { //this is for ace adjustment, to suit the player depending on their current hand
             for (Card c : hand) {
                 if (c.getRank().equals("Ace") && score > 21) {
                     score -= 10;

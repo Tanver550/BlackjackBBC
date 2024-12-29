@@ -4,6 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/*
+this is for each individual card, make sures its properities are assignmed correctly
+ */
+
 public class CardTest {
     @Test
     void testCardCreation() {
