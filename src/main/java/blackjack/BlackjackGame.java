@@ -112,7 +112,7 @@ public class BlackjackGame {
 
         if (dealer.getScore() <= 21 && dealer.getScore() > highestScore) {
             winner = dealer;
-            highestScore = dealer.getScore(); // Meaningfully update highestScore
+            highestScore = dealer.getScore(); 
         }
 
         if (winner != null) {
