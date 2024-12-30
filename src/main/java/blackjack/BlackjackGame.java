@@ -24,6 +24,7 @@ public class BlackjackGame {
         System.out.println("Thanks for playing Blackjack!");
     }
 
+    //creates a new game with num players, their names and dealer
     void initialiseGame() {
         deck = new Deck();
         deck.shuffle();
@@ -51,6 +52,7 @@ public class BlackjackGame {
         }
     }
 
+    //each round that goes by
     private void playRound() {
         // Deal initial cards to players and dealer
         for (Player player : players) {
@@ -65,7 +67,7 @@ public class BlackjackGame {
             while (getPlayerChoice(player)) {
                 Card card = deck.dealCard();
                 System.out.println("You drew: " + card);
-                player.addCard(card);
+                player.addCard(card, false, scanner); // Pass false for players
                 System.out.println(player);
 
                 if (player.getScore() > 21) {
@@ -80,7 +82,7 @@ public class BlackjackGame {
         while (dealer.getScore() < 17) { // Dealer must hit until score is 17+
             Card card = deck.dealCard();
             System.out.println("Dealer drew: " + card);
-            dealer.addCard(card);
+            dealer.addCard(card, true, scanner); // Pass true for the dealer
         }
         System.out.println(dealer);
 
@@ -88,14 +90,20 @@ public class BlackjackGame {
         determineWinner();
     }
 
+    //deals the initial cards
     private void dealInitialCards(Player player) {
-        player.addCard(deck.dealCard());
-        player.addCard(deck.dealCard());
+        player.addCard(deck.dealCard(), player.getName().equals("Dealer"), scanner);
+        player.addCard(deck.dealCard(), player.getName().equals("Dealer"), scanner);
     }
 
+    //handles the players choce of hit or stand
     private boolean getPlayerChoice(Player player) {
         System.out.print(player.getName() + ", do you want to 'hit' or 'stand'? ");
-        String choice = scanner.nextLine().toLowerCase();
+        String choice = scanner.nextLine().trim().toLowerCase();
+        while (!choice.equals("hit") && !choice.equals("stand")) {
+            System.out.print("Invalid input. Please enter 'hit' or 'stand': ");
+            choice = scanner.nextLine().trim().toLowerCase();
+        }
         return choice.equals("hit");
     }
 
@@ -112,7 +120,7 @@ public class BlackjackGame {
 
         if (dealer.getScore() <= 21 && dealer.getScore() > highestScore) {
             winner = dealer;
-            highestScore = dealer.getScore(); 
+            highestScore = dealer.getScore();
         }
 
         if (winner != null) {
@@ -126,13 +134,14 @@ public class BlackjackGame {
         }
     }
 
+    //play again choice is given at the end after winner is announced
     private boolean askToPlayAgain() {
         System.out.print("Do you want to play again? (yes/no): ");
         String choice = scanner.nextLine().toLowerCase();
         return choice.equals("yes");
     }
 
-    // Getter methods for testing purposes
+    //getters and setters for testing
     public List<Player> getPlayers() {
         return players;
     }

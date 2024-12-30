@@ -9,12 +9,15 @@ deck testing. this is for the deck from which cards are handed out. makes sure t
  */
 
 public class DeckTest {
+
+    //deck should always have 52 in it
     @Test
     void testDeckSize() {
         Deck deck = new Deck();
         assertEquals(52, deck.cardsLeft());
     }
 
+    //shuffle does not chnage the size
     @Test
     void testShuffleDoesNotChangeSize() {
         Deck deck = new Deck();
@@ -30,6 +33,7 @@ public class DeckTest {
         assertEquals(51, deck.cardsLeft());
     }
 
+    //trying to deal from an empty deck is not allowed
     @Test
     void testEmptyDeckThrowsException() {
         Deck deck = new Deck();

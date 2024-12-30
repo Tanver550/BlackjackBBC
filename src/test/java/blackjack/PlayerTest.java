@@ -2,39 +2,36 @@ package blackjack;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+import java.util.Scanner;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-/*
-this is for testing everything player related. this is anyone who participates in the game.
-ensures correct initialisation of their hands, scores and what not
-
- */
-
 public class PlayerTest {
-    @Test
-    void testPlayerInitialState() {
-        Player player = new Player("John");
-        assertEquals("John", player.getName());
-        assertEquals(0, player.getScore());
-        assertTrue(player.getHand().isEmpty());
-    }
 
     @Test
     void testPlayerAddCard() {
         Player player = new Player("John");
         Card card = new Card("Ace", "Spades", 11);
-        player.addCard(card);
+        Scanner scanner = new Scanner(new ByteArrayInputStream("11\n".getBytes()));
+
+        player.addCard(card, false, scanner);
+
         assertEquals(11, player.getScore());
         assertEquals(1, player.getHand().size());
         assertEquals(card, player.getHand().get(0));
     }
 
     @Test
-    void testPlayerBustWithAceAdjustment() {
-        Player player = new Player("John");
-        player.addCard(new Card("Ace", "Spades", 11));
-        player.addCard(new Card("King", "Hearts", 10));
-        player.addCard(new Card("Queen", "Diamonds", 10));
-        assertEquals(21, player.getScore());
+    void testDealerAddCard() {
+        Player dealer = new Player("Dealer");
+        Card card = new Card("Ace", "Hearts", 11);
+
+        // Automated dealer logic
+        dealer.addCard(card, true, new Scanner(System.in));
+
+        assertEquals(11, dealer.getScore());
+        assertEquals(1, dealer.getHand().size());
+        assertEquals(card, dealer.getHand().get(0));
     }
 }

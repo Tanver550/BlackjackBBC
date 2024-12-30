@@ -1,5 +1,9 @@
 package blackjack;
 
+
+/*
+card class, represents a single card, and puts the rank and suit together
+ */
 public class Card {
     private String rank;
     private String suit;

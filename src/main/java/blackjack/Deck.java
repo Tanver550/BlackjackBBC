@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+// this is a deck of 52 cards, can shuffle the deck so its not in order
+
 public class Deck {
     private List<Card> cards;
 

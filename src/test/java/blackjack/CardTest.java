@@ -9,6 +9,7 @@ this is for each individual card, make sures its properities are assignmed corre
  */
 
 public class CardTest {
+    //see if a card can be made
     @Test
     void testCardCreation() {
         Card card = new Card("Ace", "Spades", 11);
