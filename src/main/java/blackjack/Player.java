@@ -31,7 +31,7 @@ public class Player {
                 // Prompt the player for Ace value
                 System.out.print(name + ", you received an Ace! Do you want it to count as 1 or 11? ");
                 while (true) {
-                    String input = scanner.nextLine();
+                    String input = scanner.nextLine().trim();
                     if (input.equals("1")) {
                         score += 1;
                         break;
@@ -49,7 +49,7 @@ public class Player {
         }
     }
 
-    //getters and setters for testing purposes
+    // Getters
     public int getScore() {
         return score;
     }
@@ -61,7 +61,6 @@ public class Player {
     public String getName() {
         return name;
     }
-
 
     @Override
     public String toString() {

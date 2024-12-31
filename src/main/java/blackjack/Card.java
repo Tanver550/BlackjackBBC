@@ -15,6 +15,11 @@ public class Card {
         this.value = value;
     }
 
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+
     public String getRank() {
         return rank;
     }

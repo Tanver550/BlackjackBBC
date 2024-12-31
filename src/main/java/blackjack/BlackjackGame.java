@@ -24,7 +24,7 @@ public class BlackjackGame {
         System.out.println("Thanks for playing Blackjack!");
     }
 
-    //creates a new game with num players, their names and dealer
+    // Sets up a new game: deck, number of players, players' names, and the dealer
     void initialiseGame() {
         deck = new Deck();
         deck.shuffle();
@@ -52,22 +52,48 @@ public class BlackjackGame {
         }
     }
 
-    //each round that goes by
+    // Deals two cards to the given player
+    private void dealInitialCards(Player player) {
+        if (player.getName().equals("Dealer")) {
+            player.addCard(deck.dealCard(), true, scanner);
+            player.addCard(deck.dealCard(), true, scanner);
+        } else {
+            // this is to make sure the player has the choice of eitheer 1 or 11 when ace is handed out.
+            player.addCard(deck.dealCard(), false, scanner);
+            player.addCard(deck.dealCard(), false, scanner);
+        }
+    }
+
     private void playRound() {
-        // Deal initial cards to players and dealer
+        // 1) Deal initial cards
+        dealInitialCardsToEveryone();
+
+        // 2) Each player takes a turn
+        handlePlayerTurns();
+
+        // 3) Dealer takes a turn
+        handleDealerTurn();
+
+        // 4) Determine the winner
+        determineWinner();
+    }
+
+    private void dealInitialCardsToEveryone() {
         for (Player player : players) {
             dealInitialCards(player);
         }
         dealInitialCards(dealer);
+    }
 
-        // Player turns
+    private void handlePlayerTurns() {
         for (Player player : players) {
             System.out.println("\n" + player.getName() + "'s turn:");
             System.out.println(player);
-            while (getPlayerChoice(player)) {
+
+            while (getPlayerChoice(player)) {  // "Hit" or "Stand"
                 Card card = deck.dealCard();
                 System.out.println("You drew: " + card);
-                player.addCard(card, false, scanner); // Pass false for players
+                player.addCard(card, false, scanner);  // For subsequent hits, let the player decide Ace value
                 System.out.println(player);
 
                 if (player.getScore() > 21) {
@@ -76,27 +102,9 @@ public class BlackjackGame {
                 }
             }
         }
-
-        // Dealer's turn
-        System.out.println("\nDealer's turn:");
-        while (dealer.getScore() < 17) { // Dealer must hit until score is 17+
-            Card card = deck.dealCard();
-            System.out.println("Dealer drew: " + card);
-            dealer.addCard(card, true, scanner); // Pass true for the dealer
-        }
-        System.out.println(dealer);
-
-        // Determine the winner
-        determineWinner();
     }
 
-    //deals the initial cards
-    private void dealInitialCards(Player player) {
-        player.addCard(deck.dealCard(), player.getName().equals("Dealer"), scanner);
-        player.addCard(deck.dealCard(), player.getName().equals("Dealer"), scanner);
-    }
-
-    //handles the players choce of hit or stand
+    // Asks the player if they want to "hit" or "stand"
     private boolean getPlayerChoice(Player player) {
         System.out.print(player.getName() + ", do you want to 'hit' or 'stand'? ");
         String choice = scanner.nextLine().trim().toLowerCase();
@@ -107,10 +115,21 @@ public class BlackjackGame {
         return choice.equals("hit");
     }
 
+    private void handleDealerTurn() {
+        System.out.println("\nDealer's turn:");
+        while (dealer.getScore() < 17) {
+            Card card = deck.dealCard();
+            System.out.println("Dealer drew: " + card);
+            dealer.addCard(card, true, scanner); // in my case, dealer is computer/casino, so ace handlig is done to ensure dealer doesnt go bust
+        }
+        System.out.println(dealer);
+    }
+
     private void determineWinner() {
         Player winner = null;
         int highestScore = 0;
 
+        // Find the highest-scoring player (<= 21)
         for (Player player : players) {
             if (player.getScore() <= 21 && player.getScore() > highestScore) {
                 winner = player;
@@ -118,6 +137,7 @@ public class BlackjackGame {
             }
         }
 
+        // Compare dealer against that highest score
         if (dealer.getScore() <= 21 && dealer.getScore() > highestScore) {
             winner = dealer;
             highestScore = dealer.getScore();
@@ -134,14 +154,14 @@ public class BlackjackGame {
         }
     }
 
-    //play again choice is given at the end after winner is announced
+    // Asks the user if they want to play another round
     private boolean askToPlayAgain() {
         System.out.print("Do you want to play again? (yes/no): ");
         String choice = scanner.nextLine().toLowerCase();
         return choice.equals("yes");
     }
 
-    //getters and setters for testing
+    // Getters for testing
     public List<Player> getPlayers() {
         return players;
     }
