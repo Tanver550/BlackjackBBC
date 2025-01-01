@@ -28,8 +28,9 @@ public class BlackjackGameTest {
         assertEquals("Dealer", game.getDealer().getName());
     }
 
+    // test scenario 2 and 3
     @Test
-    void testPlayerHitsAndStands() {
+    void Scenario2_3_testPlayerHitsAndStands() {
         Player player = new Player("TestPlayer");
         Scanner scanner = new Scanner(System.in);
 
@@ -38,16 +39,17 @@ public class BlackjackGameTest {
         player.addCard(new Card("5", "Clubs", 5), false, scanner);
         assertEquals(13, player.getScore());
 
-        // Simulate hitting
+        // Simulate hitting, so the score is added
         player.addCard(new Card("7", "Diamonds", 7), false, scanner); // Total: 20
         assertEquals(20, player.getScore());
 
-        // Simulate standing (no additional action)
+        // Simulate standing, the plaeyrs score doesnt change as they have not drawn a card
         assertEquals(20, player.getScore()); // Score remains unchanged
+
     }
 
     @Test
-    void testPlayerBust() {
+    void scenario5_testPlayerBust() {
         Player player = new Player("TestPlayer");
         Scanner scanner = new Scanner(System.in);
 
@@ -58,5 +60,26 @@ public class BlackjackGameTest {
 
         assertTrue(player.getScore() > 21); // Verify bust condition
     }
+
+    // test to see if player is dealt exacttly 2 card in the opening hand
+    //enter player name, (game deals cards) the stand, after staniding the player should have 2 cards in the hand
+    @Test
+    void scenario1_testOpeningHand() {
+        String userInput = "1\nTanver\nstand\nno\n";
+        ByteArrayInputStream in = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(in);
+
+        // Create and run the game
+        BlackjackGame game = new BlackjackGame();
+        game.play();
+
+        // Now we can assert that the only player "Alice" got exactly 2 cards
+        assertEquals(1, game.getPlayers().size(), "Should have exactly 1 player");
+        Player alice = game.getPlayers().get(0);
+        assertEquals(2, alice.getHand().size(),
+                "Player should be dealt exactly 2 cards at the start of the round");
+    }
+
+
 }
 
