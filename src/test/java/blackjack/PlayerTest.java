@@ -76,7 +76,7 @@ public class PlayerTest {
     @Test
     void scenario7_testKingQueenAceEquals21() {
         Player player = new Player("AceKQ");
-        // We'll feed "1" so the Ace is counted as 1
+        // "1" so the Ace is counted as 1
         String userInput = "1\n";
         ByteArrayInputStream in = new ByteArrayInputStream(userInput.getBytes());
         Scanner scanner = new Scanner(in);
@@ -86,7 +86,7 @@ public class PlayerTest {
         // Queen => 10
         player.addCard(new Card("Queen", "Diamonds", 10), false, scanner);
 
-        // So total now 20; Ace => user picks 1 => 21
+        // total now 20; Ace => user picks 1 => 21
         player.addCard(new Card("Ace", "Clubs", 11), false, scanner);
 
         assertEquals(21, player.getScore(),
@@ -96,7 +96,7 @@ public class PlayerTest {
     @Test
     void scenario8_testNineAndTwoAcesEquals21() {
         Player player = new Player("DoubleAce");
-        // We'll feed "11" for the first Ace, "1" for the second Ace => total 21
+        // "11" for the first Ace, "1" for the second Ace => total 21
         String userInput = "11\n1\n";
         ByteArrayInputStream in = new ByteArrayInputStream(userInput.getBytes());
         Scanner scanner = new Scanner(in);
