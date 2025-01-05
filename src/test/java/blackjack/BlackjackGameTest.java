@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
-import java.util.Scanner;
 
 public class BlackjackGameTest {
 
@@ -32,15 +31,14 @@ public class BlackjackGameTest {
     @Test
     void Scenario2_3_testPlayerHitsAndStands() {
         Player player = new Player("TestPlayer");
-        Scanner scanner = new Scanner(System.in);
 
         // Add initial cards
-        player.addCard(new Card("8", "Hearts", 8), false, scanner); // Player-specific logic
-        player.addCard(new Card("5", "Clubs", 5), false, scanner);
+        player.addCard(new Card("8", "Hearts", 8)); // Player-specific logic
+        player.addCard(new Card("5", "Clubs", 5));
         assertEquals(13, player.getScore());
 
         // Simulate hitting, so the score is added
-        player.addCard(new Card("7", "Diamonds", 7), false, scanner); // Total: 20
+        player.addCard(new Card("7", "Diamonds", 7)); // Total: 20
         assertEquals(20, player.getScore());
 
         // Simulate standing, the plaeyrs score doesnt change as they have not drawn a card
@@ -51,12 +49,11 @@ public class BlackjackGameTest {
     @Test
     void scenario5_testPlayerBust() {
         Player player = new Player("TestPlayer");
-        Scanner scanner = new Scanner(System.in);
 
         // Add cards that cause a bust
-        player.addCard(new Card("King", "Hearts", 10), false, scanner);
-        player.addCard(new Card("Queen", "Diamonds", 10), false, scanner);
-        player.addCard(new Card("5", "Clubs", 5), false, scanner); // Total: 25 (Bust)
+        player.addCard(new Card("King", "Hearts", 10));
+        player.addCard(new Card("Queen", "Diamonds", 10));
+        player.addCard(new Card("5", "Clubs", 5)); // Total: 25 (Bust)
 
         assertTrue(player.getScore() > 21); // Verify bust condition
     }
@@ -73,13 +70,10 @@ public class BlackjackGameTest {
         BlackjackGame game = new BlackjackGame();
         game.play();
 
-        // Now we can assert that the only player "Alice" got exactly 2 cards
+        // Now assert that the player got exactly 2 cards
         assertEquals(1, game.getPlayers().size(), "Should have exactly 1 player");
         Player alice = game.getPlayers().get(0);
-        assertEquals(2, alice.getHand().size(),
-                "Player should be dealt exactly 2 cards at the start of the round");
+        assertEquals(2, alice.getHand().size(), "Player should be dealt exactly 2 cards at the start of the round");
     }
-
-
 }
 

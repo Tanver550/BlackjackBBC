@@ -14,12 +14,8 @@ public class Player {
         this.score = 0;
     }
 
-    /**
-     * Adds a card to the player's hand without prompting.
-     * By default, we pick 11 for an Ace if it won't bust, otherwise 1.
-     * This is just a placeholder.
-     * Later, the user can be prompted to reassign Ace values during their turn.
-     */
+
+    // Aces default to 11 if it wont bust, otherwise 1, ensures they dont bust automatically,
     public void addCard(Card card) {
         hand.add(card);
         if (card.getRank().equals("Ace")) {
@@ -36,8 +32,7 @@ public class Player {
     }
 
     /**
-     * Allows adjusting an Ace's value manually after the card is already in the hand.
-     * (Used when prompting the user during their turn.)
+     * Allows adjusting an ace value manually after the card is already in the hand.
      */
     public void adjustAceValue(Card card, int newValue) {
         if (card.getRank().equals("Ace")) {
@@ -48,6 +43,7 @@ public class Player {
         }
     }
 
+    // getters for testing
     public int getScore() {
         return score;
     }
