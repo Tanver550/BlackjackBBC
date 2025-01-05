@@ -65,12 +65,12 @@ public class PlayerTest {
     void scenario7_testKingQueenAceEquals21() {
         Player player = new Player("AceKQ");
 
-        // King => 10
+        // King is 10
         player.addCard(new Card("King", "Hearts", 10));
-        // Queen => 10
+        // Queen is 10
         player.addCard(new Card("Queen", "Diamonds", 10));
 
-        // So total now 20; Ace => user picks 1 => 21
+        // So total now 20, Ace, user picks 1 so 21
         player.addCard(new Card("Ace", "Clubs", 11));
 
         assertEquals(21, player.getScore(), "King (10) + Queen (10) + Ace (1) should be 21");
@@ -83,11 +83,11 @@ public class PlayerTest {
         player.addCard(new Card("9", "Hearts", 9));
         assertEquals(9, player.getScore());
 
-        // First Ace pick 11  total 20
+        // first Ace pick 11  total 20
         player.addCard(new Card("Ace", "Clubs", 11));
         assertEquals(20, player.getScore());
 
-        // Second Ace pick 1  total 21
+        // second Ace pick 1  total 21
         player.addCard(new Card("Ace", "Diamonds", 11));
         assertEquals(21, player.getScore(), "9 + Ace(11) + Ace(1) should result in 21");
     }
