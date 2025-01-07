@@ -1,35 +1,33 @@
 package blackjack;
 
-
-/*
-card class, represents a single card, and puts the rank and suit together
- */
 public class Card {
-    private String rank;
-    private String suit;
+    private final Rank rank;
+    private final Suit suit;
     private int value;
 
-    public Card(String rank, String suit, int value) {
+    public Card(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
-        this.value = value;
+
+        // use the rank default value
+        this.value = rank.getDefaultValue();
     }
 
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-
-    public String getRank() {
+    public Rank getRank() {
         return rank;
     }
 
-    public String getSuit() {
+    public Suit getSuit() {
         return suit;
     }
 
     public int getValue() {
         return value;
+    }
+
+    // allow chnging card value if its ace
+    public void setValue(int value) {
+        this.value = value;
     }
 
     @Override

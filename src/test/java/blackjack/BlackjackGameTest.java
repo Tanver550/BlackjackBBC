@@ -30,19 +30,17 @@ public class BlackjackGameTest {
     // test scenario 2 and 3
     @Test
     void Scenario2_3_testPlayerHitsAndStands() {
+
         Player player = new Player("TestPlayer");
 
-        // Add initial cards
-        player.addCard(new Card("8", "Hearts", 8)); // Player-specific logic
-        player.addCard(new Card("5", "Clubs", 5));
+        player.addCard(new Card(Rank.EIGHT, Suit.HEARTS));
+        player.addCard(new Card(Rank.FIVE, Suit.CLUBS));
         assertEquals(13, player.getScore());
 
-        // Simulate hitting, so the score is added
-        player.addCard(new Card("7", "Diamonds", 7)); // Total: 20
+        player.addCard(new Card(Rank.SEVEN, Suit.DIAMONDS));
         assertEquals(20, player.getScore());
 
-        // Simulate standing, the plaeyrs score doesnt change as they have not drawn a card
-        assertEquals(20, player.getScore()); // Score remains unchanged
+        assertEquals(20, player.getScore());
 
     }
 
@@ -50,12 +48,11 @@ public class BlackjackGameTest {
     void scenario5_testPlayerBust() {
         Player player = new Player("TestPlayer");
 
-        // Add cards that cause a bust
-        player.addCard(new Card("King", "Hearts", 10));
-        player.addCard(new Card("Queen", "Diamonds", 10));
-        player.addCard(new Card("5", "Clubs", 5)); // Total: 25 (Bust)
+        player.addCard(new Card(Rank.KING, Suit.HEARTS));
+        player.addCard(new Card(Rank.QUEEN, Suit.DIAMONDS));
+        player.addCard(new Card(Rank.FIVE, Suit.CLUBS));
 
-        assertTrue(player.getScore() > 21); // Verify bust condition
+        assertTrue(player.getScore() > 21, "Player should bust with a total > 21");
     }
 
     // test to see if player is dealt exacttly 2 card in the opening hand
@@ -70,7 +67,7 @@ public class BlackjackGameTest {
         BlackjackGame game = new BlackjackGame();
         game.play();
 
-        // Now assert that the player got exactly 2 cards
+        // assert that the player got exactly 2 cards
         assertEquals(1, game.getPlayers().size(), "Should have exactly 1 player");
         Player alice = game.getPlayers().get(0);
         assertEquals(2, alice.getHand().size(), "Player should be dealt exactly 2 cards at the start of the round");

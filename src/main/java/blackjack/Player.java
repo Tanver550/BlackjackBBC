@@ -14,11 +14,15 @@ public class Player {
         this.score = 0;
     }
 
-
-    // Aces default to 11 if it wont bust, otherwise 1, ensures they dont bust automatically,
+    /**
+     * Adds a card to the player hand.
+     * If its an Ace by Rank check to treat it as 11 without busting
+     */
     public void addCard(Card card) {
         hand.add(card);
-        if (card.getRank().equals("Ace")) {
+
+        if (card.getRank() == Rank.ACE) {
+            // If 11 wont bust we pick 11 else 1
             if (score + 11 <= 21) {
                 card.setValue(11);
                 score += 11;
@@ -32,18 +36,16 @@ public class Player {
     }
 
     /**
-     * Allows adjusting an ace value manually after the card is already in the hand.
+     * Adjust an Ace value from 1 to 11 or 11 to 1 if needed
      */
     public void adjustAceValue(Card card, int newValue) {
-        if (card.getRank().equals("Ace")) {
-            // remove old value, set new, then add
+        if (card.getRank() == Rank.ACE) {
             score -= card.getValue();
             card.setValue(newValue);
             score += card.getValue();
         }
     }
 
-    // getters for testing
     public int getScore() {
         return score;
     }

@@ -12,15 +12,19 @@ public class CardTest {
     //see if a card can be made
     @Test
     void testCardCreation() {
-        Card card = new Card("Ace", "Spades", 11);
-        assertEquals("Ace", card.getRank());
-        assertEquals("Spades", card.getSuit());
+
+        Card card = new Card(Rank.ACE, Suit.SPADES);
+
+        // Check rank suit nd initial value
+        assertEquals(Rank.ACE, card.getRank());
+        assertEquals(Suit.SPADES, card.getSuit());
         assertEquals(11, card.getValue());
     }
 
     @Test
     void testCardToString() {
-        Card card = new Card("King", "Hearts", 10);
-        assertEquals("King of Hearts", card.toString());
+        Card card = new Card(Rank.KING, Suit.HEARTS);
+
+        assertEquals("KING of HEARTS", card.toString());
     }
 }

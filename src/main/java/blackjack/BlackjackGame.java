@@ -44,7 +44,7 @@ public class BlackjackGame {
             }
         }
 
-        // validation to ensure player can't name themselves dealer or is empty
+        // validation to ensure player cant name themselves dealer or is empty
         for (int i = 1; i <= numPlayers; i++) {
             String name = "";
             while (name.trim().isEmpty() || "dealer".equalsIgnoreCase(name.trim())) {
@@ -116,7 +116,7 @@ public class BlackjackGame {
         if (player instanceof Dealer) return;
 
         for (Card card : player.getHand()) {
-            if ("Ace".equals(card.getRank())) {
+            if (card.getRank() == Rank.ACE) {
                 System.out.print(player.getName()
                         + ", you have an Ace. It's currently " + card.getValue()
                         + ". Do you want to keep it ("
