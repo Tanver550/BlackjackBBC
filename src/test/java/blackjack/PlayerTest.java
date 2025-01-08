@@ -12,13 +12,13 @@ public class PlayerTest {
 
         Card card = new Card(Rank.ACE, Suit.SPADES);
 
-        // Add the card to the player hand.
+        // Add the card to the player hand
         player.addCard(card);
 
         // Check that the score is 11 and the hand has 1 card
         assertEquals(11, player.getScore());
-        assertEquals(1, player.getHand().size());
-        assertEquals(card, player.getHand().get(0));
+        assertEquals(1, player.getHand().getCards().size());
+        assertEquals(card, player.getHand().getCards().get(0));
     }
 
     @Test
@@ -31,8 +31,8 @@ public class PlayerTest {
 
         // Score should be 11 if an Ace was added as 11 by default
         assertEquals(11, dealer.getScore());
-        assertEquals(1, dealer.getHand().size());
-        assertEquals(card, dealer.getHand().get(0));
+        assertEquals(1, dealer.getHand().getCards().size());
+        assertEquals(card, dealer.getHand().getCards().get(0));
     }
 
     @Test
@@ -77,7 +77,6 @@ public class PlayerTest {
 
         // So total now 20, Ace, user picks 1 so 21
         player.addCard(new Card(Rank.ACE, Suit.HEARTS));
-
 
         assertEquals(21, player.getScore(), "King (10) + Queen (10) + Ace (1) should be 21");
     }

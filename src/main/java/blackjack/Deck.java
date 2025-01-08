@@ -5,17 +5,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class Deck {
-    private List<Card> cards;
+    private final List<Card> cards;
 
     public Deck() {
         cards = new ArrayList<>();
-
-        //  loop over the enums:
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
                 cards.add(new Card(rank, suit));
             }
         }
+        // shuffle here or call shuffle() from outside
+        shuffle();
     }
 
     public void shuffle() {

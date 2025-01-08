@@ -11,7 +11,7 @@ public class BlackjackGame {
     private final Scanner scanner;
 
     public BlackjackGame() {
-        scanner = new Scanner(System.in);
+        this.scanner = new Scanner(System.in);
     }
 
     public void play() {
@@ -25,10 +25,12 @@ public class BlackjackGame {
     }
 
     void initialiseGame() {
-        deck = new Deck();
-        deck.shuffle();
-        players = new ArrayList<>(); // players are seperate from dealer
-        dealer = new Dealer();   // dealer is now an extension of player for scalbaility polymorphism
+        deck = new Deck(); // builds a standard 52 deck
+        players = new ArrayList<>();
+        dealer = new Dealer();
+
+        // et the dealer strategy
+        dealer.setHitStrategy(new DealerHitStrategy());
 
         System.out.println("Welcome to Blackjack!");
         int numPlayers = 0;
@@ -44,7 +46,6 @@ public class BlackjackGame {
             }
         }
 
-        // validation to ensure player cant name themselves dealer or is empty
         for (int i = 1; i <= numPlayers; i++) {
             String name = "";
             while (name.trim().isEmpty() || "dealer".equalsIgnoreCase(name.trim())) {
@@ -54,50 +55,47 @@ public class BlackjackGame {
                     System.out.println("A valid (non-'Dealer') name is required. Please try again.");
                 }
             }
-            players.add(new Player(name));
+            Player player = new Player(name);
+            // Each human player uses a UserHitStrategy
+            player.setHitStrategy(new UserHitStrategy(scanner));
+            players.add(player);
         }
     }
 
-    // simulates a round of black jack
     private void playRound() {
-        // deal cards first
-        dealInitialCardsToAll();
+        // Shuffle if needed
+        deck.shuffle();
 
-        // players take turns either hit or stand depending on how many there are in the game
-        handlePlayerTurns();
-
-        // dealer gets cards
-        handleDealerTurn();
-
-        // caculate the winner of the game comapre scores
-        determineWinners();
-    }
-
-    private void dealInitialCardsToAll() {
+        // Deal initial 2 cards to each player
         for (Player player : players) {
             player.addCard(deck.dealCard());
             player.addCard(deck.dealCard());
         }
+        // Dealer gets 2 cards
         dealer.addCard(deck.dealCard());
         dealer.addCard(deck.dealCard());
+
+        // Each player turn
+        handlePlayerTurns();
+
+        // Dealer turn
+        handleDealerTurn();
+
+        // Determine winners
+        determineWinners();
     }
 
     private void handlePlayerTurns() {
         for (Player player : players) {
             System.out.println("\n" + player.getName() + "'s turn:");
-            showPlayerHand(player);
+            System.out.println(player);
 
-            // gives the player the choice of if they want ace to be 11 or 1 as said in the doc, try to keep them in the game and stop them from accidently going bust
-            promptForAcesIfAny(player);
-
-            while (playerWantsToHit(player)) {
+            // while the player strategy says hit and they havent busted
+            while (player.shouldHit(dealer)) {
                 Card card = deck.dealCard();
-                System.out.println(player.getName() + " draws: " + card);
                 player.addCard(card);
-
-                showPlayerHand(player);
-
-                promptForAcesIfAny(player);
+                System.out.println(player.getName() + " draws: " + card);
+                System.out.println(player);
 
                 if (player.getScore() > 21) {
                     System.out.println(player.getName() + " busts with " + player.getScore() + "!");
@@ -107,67 +105,13 @@ public class BlackjackGame {
         }
     }
 
-    private void showPlayerHand(Player player) {
-        System.out.println(player);
-    }
-
-    private void promptForAcesIfAny(Player player) {
-        // Dealer is not prompted manually its handled automatically
-        if (player instanceof Dealer) return;
-
-        for (Card card : player.getHand()) {
-            if (card.getRank() == Rank.ACE) {
-                System.out.print(player.getName()
-                        + ", you have an Ace. It's currently " + card.getValue()
-                        + ". Do you want to keep it ("
-                        + card.getValue() + ") or change it to " + (card.getValue() == 1 ? 11 : 1) + "? ");
-
-                label:
-                while (true) {
-                    String input = scanner.nextLine().trim().toLowerCase();
-                    switch (input) {
-                        case "keep":
-                            break label;
-                        case "1":
-                            if (card.getValue() != 1) {
-                                player.adjustAceValue(card, 1);
-                            }
-                            break label;
-                        case "11":
-                            if (card.getValue() != 11) {
-                                // only do so if it won't bust them
-                                int hypothetical = player.getScore() - card.getValue() + 11;
-                                if (hypothetical <= 21) {
-                                    player.adjustAceValue(card, 11);
-                                } else {
-                                    System.out.println("Sorry, that would bust you. Keeping it as " + card.getValue());
-                                }
-                            }
-                            break label;
-                        default:
-                            System.out.print("Invalid input. Enter 'keep', '1' or '11': ");
-                            break;
-                    }
-                }
-                System.out.println("New score for " + player.getName() + " is " + player.getScore());
-            }
-        }
-    }
-
-    private boolean playerWantsToHit(Player player) {
-        if (player.getScore() > 21) return false;
-        System.out.print(player.getName() + ", do you want to 'hit' or 'stand'? ");
-        String choice = scanner.nextLine().trim().toLowerCase();
-        while (!choice.equals("hit") && !choice.equals("stand")) {
-            System.out.print("Invalid input. Please enter 'hit' or 'stand': ");
-            choice = scanner.nextLine().trim().toLowerCase();
-        }
-        return "hit".equals(choice);
-    }
-
     private void handleDealerTurn() {
         System.out.println("\nDealer's turn:");
+        System.out.println(dealer);
+
+        // Let the Dealer autoplay with DealerHitStrategy
         dealer.autoPlay(deck);
+
         System.out.println(dealer);
     }
 
@@ -181,7 +125,7 @@ public class BlackjackGame {
                 System.out.println(player.getName() + " loses with " + playerScore + ".");
             }
             else if (dealerScore > 21) {
-                // if the dealer busts, all players who haven't busted win
+                // if dealer busts all players who havent busted, win
                 System.out.println(player.getName() + " wins with " + playerScore + "!");
             }
             else {
@@ -200,10 +144,9 @@ public class BlackjackGame {
     private boolean askToPlayAgain() {
         System.out.print("Do you want to play again? (yes/no): ");
         String choice = scanner.nextLine().toLowerCase();
-        return "yes".equals(choice);
+        return choice.equals("yes");
     }
 
-    // Getters
     public List<Player> getPlayers() {
         return players;
     }

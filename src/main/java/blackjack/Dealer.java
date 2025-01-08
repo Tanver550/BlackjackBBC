@@ -1,8 +1,8 @@
 package blackjack;
 
 /**
- * Dealer is a type of Player with distinct auto-hit logic.
- * can still reuse Player's fields/methods for the dealer hand and score.
+ * A specialised Player representing the Dealer
+ * uses a DealerHitStrategy
  */
 public class Dealer extends Player {
 
@@ -10,18 +10,14 @@ public class Dealer extends Player {
         super("Dealer");
     }
 
-    /*
-     * reuse the same addCard logic that the Player uses.
-     * If there is need to add unique Ace behavior for the deale then override addCard() here.
-     */
-
     /**
-     * The dealer automatically hits until their score >= 17.
+     * The dealer automatically hits (or stands) based on DealerHitStrategy
+     * until the score >= 17 in typical Blackjack
      */
     public void autoPlay(Deck deck) {
-        while (this.getScore() < 17) {
-            Card card = deck.dealCard();
-            this.addCard(card);
+        // keep dealing cards while strategy says hit
+        while (shouldHit(this)) {
+            addCard(deck.dealCard());
         }
     }
 }

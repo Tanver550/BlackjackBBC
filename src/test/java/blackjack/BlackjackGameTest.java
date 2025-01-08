@@ -69,8 +69,8 @@ public class BlackjackGameTest {
 
         // assert that the player got exactly 2 cards
         assertEquals(1, game.getPlayers().size(), "Should have exactly 1 player");
-        Player alice = game.getPlayers().get(0);
-        assertEquals(2, alice.getHand().size(), "Player should be dealt exactly 2 cards at the start of the round");
+        Player Tanver = game.getPlayers().get(0);
+        assertEquals(2, Tanver.getHand().getCards().size(), "Player should be dealt exactly 2 cards at the start of the round");
     }
 }
 
