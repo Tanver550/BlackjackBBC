@@ -2,6 +2,7 @@ package blackjack;
 
 /**
  * Strategy interface for deciding whether a player should hit or stand
+ * each player has a hitStrategy
  */
 public interface HitStrategy {
     /**

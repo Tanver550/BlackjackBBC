@@ -1,5 +1,8 @@
 package blackjack;
-
+/**
+ represents a player, each player has a hand and hitstrategy
+ keeps track of the player score, add cards to the handand manage a human player
+ */
 public class Player {
     private final String name;
     private final Hand hand;
@@ -12,10 +15,6 @@ public class Player {
 
     public void setHitStrategy(HitStrategy strategy) {
         this.hitStrategy = strategy;
-    }
-
-    public HitStrategy getHitStrategy() {
-        return hitStrategy;
     }
 
     public void addCard(Card card) {
@@ -39,7 +38,7 @@ public class Player {
      */
     public boolean shouldHit(Dealer dealer) {
         if (hitStrategy == null) {
-            // If there's no strategy set default to stand
+            // If theres no strategy set default to stand
             return false;
         }
         return hitStrategy.shouldHit(this, dealer);
