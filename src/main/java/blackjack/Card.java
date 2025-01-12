@@ -1,16 +1,18 @@
 package blackjack;
 
+// represents a single card
+
 public class Card {
     private final Rank rank;
     private final Suit suit;
-    private int value;
+
+    // used for the decision if the player wants to make the ace 1 or 11
+    private Integer overrideValue;
 
     public Card(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
-
-        // use the rank default value
-        this.value = rank.getDefaultValue();
+        this.overrideValue = null;
     }
 
     public Rank getRank() {
@@ -22,12 +24,15 @@ public class Card {
     }
 
     public int getValue() {
-        return value;
+        // If its an Ace and we have an override return that
+        if (rank == Rank.ACE && overrideValue != null) {
+            return overrideValue;
+        }
+        return rank.getDefaultValue();
     }
 
-    // allow chnging card value if its ace
-    public void setValue(int value) {
-        this.value = value;
+    public void setOverrideValue(Integer overrideValue) {
+        this.overrideValue = overrideValue;
     }
 
     @Override

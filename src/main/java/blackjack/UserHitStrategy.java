@@ -1,28 +1,22 @@
 package blackjack;
 
-import java.util.Scanner;
-
-/**
- * A HitStrategy that prompts the user via console whether to hit or stand
- */
 public class UserHitStrategy implements HitStrategy {
-    private final Scanner scanner;
+    private final ConsoleIO io;
 
-    public UserHitStrategy(Scanner scanner) {
-        this.scanner = scanner;
+    public UserHitStrategy(ConsoleIO io) {
+        this.io = io;
     }
 
     @Override
     public boolean shouldHit(Player player, Dealer dealer) {
-        // If the player is already bust return false
+        // If the player is already bust, return false
         if (player.getScore() > 21) return false;
 
-        System.out.print(player.getName() + ", do you want to 'hit' or 'stand'? ");
-        String choice = scanner.nextLine().trim().toLowerCase();
+        String choice = io.readLine(player.getName() + ", do you want to 'hit' or 'stand'? ").trim().toLowerCase();
         while (!choice.equals("hit") && !choice.equals("stand")) {
-            System.out.print("Invalid input. Please enter 'hit' or 'stand': ");
-            choice = scanner.nextLine().trim().toLowerCase();
+            choice = io.readLine("Invalid input. Please enter 'hit' or 'stand': ").trim().toLowerCase();
         }
+
         return choice.equals("hit");
     }
 }

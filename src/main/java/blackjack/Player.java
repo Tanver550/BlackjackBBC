@@ -1,7 +1,7 @@
 package blackjack;
 /**
- represents a player, each player has a hand and hitstrategy
- keeps track of the player score, add cards to the handand manage a human player
+ represents a player, each player has a hand and HitStrategy
+ keeps track of the player score, add cards to the hand and manage a human player
  */
 public class Player {
     private final String name;
@@ -17,6 +17,8 @@ public class Player {
         this.hitStrategy = strategy;
     }
 
+    // player acts as a facade, when the game wants to add a card to a player, it calls player add card
+    // can have multiple hands in the future
     public void addCard(Card card) {
         hand.addCard(card);
     }

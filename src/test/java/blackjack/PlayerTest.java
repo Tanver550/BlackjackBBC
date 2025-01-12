@@ -44,12 +44,16 @@ public class PlayerTest {
         // 2) Add Queen (10)
         player.addCard(new Card(Rank.QUEEN, Suit.HEARTS));
         // Now total is 20
-        // 3) Add Ace sp We'll pick 1 from userInput so final total = 21
-        player.addCard(new Card(Rank.ACE, Suit.SPADES));
+
+        // 3) Add Ace ,want it to be worth 1 so total is 21
+        Card ace = new Card(Rank.ACE, Suit.SPADES);
+        ace.setOverrideValue(1);  // Simulate the user choosing 1
+        player.addCard(ace);
 
         assertTrue(player.getScore() <= 21, "Score should be 21 or less => valid hand");
         assertEquals(21, player.getScore(), "Expected final score to be 21");
     }
+
 
     @Test
     void scenario6_testKingAndAceEquals21() {
@@ -68,34 +72,40 @@ public class PlayerTest {
     void scenario7_testKingQueenAceEquals21() {
         Player player = new Player("AceKQ");
 
-        // King is 10
+        // King = 10
         player.addCard(new Card(Rank.KING, Suit.HEARTS));
 
-        // Queen is 10
+        // Queen = 10
         player.addCard(new Card(Rank.QUEEN, Suit.HEARTS));
 
-
-        // So total now 20, Ace, user picks 1 so 21
-        player.addCard(new Card(Rank.ACE, Suit.HEARTS));
+        // So total now 20. The Ace is chosen as 1 so = 21
+        Card ace = new Card(Rank.ACE, Suit.HEARTS);
+        ace.setOverrideValue(1);
+        player.addCard(ace);
 
         assertEquals(21, player.getScore(), "King (10) + Queen (10) + Ace (1) should be 21");
     }
+
 
     @Test
     void scenario8_testNineAndTwoAcesEquals21() {
         Player player = new Player("DoubleAce");
 
-        player.addCard(new Card(Rank.NINE,Suit.CLUBS));
+        player.addCard(new Card(Rank.NINE, Suit.CLUBS));
         assertEquals(9, player.getScore());
 
-        // first Ace pick 11  total 20
-        player.addCard(new Card(Rank.ACE, Suit.CLUBS));
-        assertEquals(20, player.getScore());
+        // 1st Ace, user picks 11 so total should become 20
+        Card ace1 = new Card(Rank.ACE, Suit.CLUBS);
+        ace1.setOverrideValue(11);
+        player.addCard(ace1);
+        assertEquals(20, player.getScore(), "9 + Ace(11) => 20");
 
-        // second Ace pick 1  total 21
-        player.addCard(new Card(Rank.ACE, Suit.DIAMONDS));
+        // 2nd Ace, user picks 1 so total should become 21
+        Card ace2 = new Card(Rank.ACE, Suit.DIAMONDS);
+        ace2.setOverrideValue(1);
+        player.addCard(ace2);
 
-        assertEquals(21, player.getScore(), "9 + Ace(11) + Ace(1) should result in 21");
+        assertEquals(21, player.getScore(), "9 + Ace(11) + Ace(1) => 21");
     }
 
 }

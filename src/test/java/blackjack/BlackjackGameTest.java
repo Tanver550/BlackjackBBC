@@ -10,6 +10,7 @@ public class BlackjackGameTest {
     @Test
     void testInitialisation() {
         // Simulate input for 3 players
+
         ByteArrayInputStream input = new ByteArrayInputStream("3\na\nb\nc\n".getBytes());
         System.setIn(input);
 
