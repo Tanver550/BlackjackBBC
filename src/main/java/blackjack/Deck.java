@@ -32,4 +32,6 @@ public class Deck {
     public int cardsLeft() {
         return cards.size();
     }
+
+    public int getSize(){return cards.size();}
 }
