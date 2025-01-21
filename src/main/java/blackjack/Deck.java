@@ -8,13 +8,22 @@ public class Deck {
     private final List<Card> cards;
 
     public Deck() {
+        this(1); // use only 1 deck when creating a deck, used for small games and testing
+    }
+
+    /**
+     * New constructor for multiple decks, a shoe
+     * e.g. new Deck(6) => 6 * 52 = 312 cards total
+     */
+    public Deck(int numberOfDecks) {
         cards = new ArrayList<>();
-        for (Suit suit : Suit.values()) {
-            for (Rank rank : Rank.values()) {
-                cards.add(new Card(rank, suit));
+        for (int i = 0; i < numberOfDecks; i++) {
+            for (Suit suit : Suit.values()) {
+                for (Rank rank : Rank.values()) {
+                    cards.add(new Card(rank, suit));
+                }
             }
         }
-        // shuffle here or call shuffle() from outside
         shuffle();
     }
 

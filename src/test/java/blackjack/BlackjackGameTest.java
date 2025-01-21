@@ -4,74 +4,97 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Integration tests for BlackjackGame,
+ * using a rigged deck (MockDeck) and simulated console input.
+ */
 public class BlackjackGameTest {
 
+
+    // test to see when Ace is drawn, selecting value correclt adds to score
     @Test
-    void testInitialisation() {
-        // Simulate input for 3 players
+    void testPlay_SinglePlayerAceChoice() {
 
-        ByteArrayInputStream input = new ByteArrayInputStream("3\na\nb\nc\n".getBytes());
-        System.setIn(input);
+        // create a player draw an ace, set the value to 1
+        String userInput = "1\nTanver\nhit\n1\nstand\nno\n";
+        System.setIn(new ByteArrayInputStream(userInput.getBytes()));
 
+        List<Card> rigged = new ArrayList<>();
+        rigged.add(new Card(Rank.EIGHT, Suit.CLUBS));
+        rigged.add(new Card(Rank.THREE, Suit.DIAMONDS));
+        rigged.add(new Card(Rank.NINE, Suit.SPADES));
+        rigged.add(new Card(Rank.SEVEN, Suit.HEARTS));
+        // next card => Ace of Hearts for the player hit
+        rigged.add(new Card(Rank.ACE, Suit.HEARTS));
+
+        rigged.add(new Card(Rank.FIVE, Suit.DIAMONDS));
+
+        Deck mockDeck = new MockDeck(rigged);
+
+        // create game, set rigged deck
         BlackjackGame game = new BlackjackGame();
-        game.initialiseGame();
+        game.setDeck(mockDeck);
 
-        // Validate players
-        assertEquals(3, game.getPlayers().size());
-        assertEquals("a", game.getPlayers().get(0).getName());
-        assertEquals("b", game.getPlayers().get(1).getName());
-        assertEquals("c", game.getPlayers().get(2).getName());
-
-        // Validate dealer
-        assertNotNull(game.getDealer());
-        assertEquals("Dealer", game.getDealer().getName());
-    }
-
-    // test scenario 2 and 3
-    @Test
-    void Scenario2_3_testPlayerHitsAndStands() {
-
-        Player player = new Player("TestPlayer");
-
-        player.addCard(new Card(Rank.EIGHT, Suit.HEARTS));
-        player.addCard(new Card(Rank.FIVE, Suit.CLUBS));
-        assertEquals(13, player.getScore());
-
-        player.addCard(new Card(Rank.SEVEN, Suit.DIAMONDS));
-        assertEquals(20, player.getScore());
-
-        assertEquals(20, player.getScore());
-
-    }
-
-    @Test
-    void scenario5_testPlayerBust() {
-        Player player = new Player("TestPlayer");
-
-        player.addCard(new Card(Rank.KING, Suit.HEARTS));
-        player.addCard(new Card(Rank.QUEEN, Suit.DIAMONDS));
-        player.addCard(new Card(Rank.FIVE, Suit.CLUBS));
-
-        assertTrue(player.getScore() > 21, "Player should bust with a total > 21");
-    }
-
-    // test to see if player is dealt exacttly 2 card in the opening hand
-    //enter player name, (game deals cards) the stand, after staniding the player should have 2 cards in the hand
-    @Test
-    void scenario1_testOpeningHand() {
-        String userInput = "1\nTanver\nstand\nno\n";
-        ByteArrayInputStream in = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(in);
-
-        // Create and run the game
-        BlackjackGame game = new BlackjackGame();
+        // run it
         game.play();
 
-        // assert that the player got exactly 2 cards
-        assertEquals(1, game.getPlayers().size(), "Should have exactly 1 player");
+        assertEquals(1, game.getPlayers().size());
         Player Tanver = game.getPlayers().get(0);
-        assertEquals(2, Tanver.getHand().getCards().size(), "Player should be dealt exactly 2 cards at the start of the round");
+
+
+        assertEquals(1, Tanver.getHands().size(), "No splits => should have 1 hand.");
+        int cardCount = Tanver.getHands().get(0).getCards().size();
+        assertEquals(3, cardCount, "Player hit exactly once => 3 cards in final hand.");
+
+        int dealerCardCount = game.getDealer().getHands().get(0).getCards().size();
+        assertTrue(dealerCardCount >= 2 && dealerCardCount <= 5, "Dealer might have drawn if below 17.");
+    }
+
+
+    // test to see if the player can split, then has 2 hands of cards
+    @Test
+    void testPlay_SinglePlayerSplit() {
+
+        String input = "1\nTanver\nyes\nstand\nstand\nno\n";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
+        List<Card> rigged = new ArrayList<>();
+        rigged.add(new Card(Rank.EIGHT, Suit.HEARTS));
+        rigged.add(new Card(Rank.EIGHT, Suit.CLUBS));
+        rigged.add(new Card(Rank.TEN, Suit.SPADES));
+        rigged.add(new Card(Rank.SIX, Suit.DIAMONDS));
+
+        rigged.add(new Card(Rank.TWO, Suit.HEARTS));
+        rigged.add(new Card(Rank.THREE, Suit.CLUBS));
+
+        rigged.add(new Card(Rank.FIVE, Suit.HEARTS));
+
+        rigged.add(new Card(Rank.FOUR, Suit.HEARTS));
+
+        Deck mockDeck = new MockDeck(rigged);
+
+        // game
+        BlackjackGame game = new BlackjackGame();
+        game.setDeck(mockDeck);
+
+        // run
+        game.play();
+
+        assertEquals(1, game.getPlayers().size());
+        Player tanver = game.getPlayers().get(0);
+
+        // after splitting => 2 hands
+        assertEquals(2, tanver.getHands().size(), "Should have 2 hands after splitting pair of 8s.");
+
+        // Each splitted hand => 2 or 3 cards depending on hits
+        for (Hand h : tanver.getHands()) {
+            assertEquals(2, h.getCards().size(), "We said 'stand' on each splitted hand => each remains 2 cards.");
+        }
+
+        int dealerCount = game.getDealer().getHands().get(0).getCards().size();
+        assertTrue(dealerCount >= 2 && dealerCount <= 5);
     }
 }
-

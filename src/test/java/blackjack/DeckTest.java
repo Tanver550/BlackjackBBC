@@ -13,21 +13,21 @@ public class DeckTest {
     //deck should always have 52 in it
     @Test
     void testDeckSize() {
-        Deck deck = new Deck();
+        Deck deck = new Deck(1);
         assertEquals(52, deck.cardsLeft());
     }
 
     //shuffle does not chnage the size
     @Test
     void testShuffleDoesNotChangeSize() {
-        Deck deck = new Deck();
+        Deck deck = new Deck(1);
         deck.shuffle();
         assertEquals(52, deck.cardsLeft());
     }
 
     @Test
     void testDealCard() {
-        Deck deck = new Deck();
+        Deck deck = new Deck(1);
         Card card = deck.dealCard();
         assertNotNull(card);
         assertEquals(51, deck.cardsLeft());
@@ -36,7 +36,7 @@ public class DeckTest {
     //trying to deal from an empty deck is not allowed
     @Test
     void testEmptyDeckThrowsException() {
-        Deck deck = new Deck();
+        Deck deck = new Deck(1);
         for (int i = 0; i < 52; i++) {
             deck.dealCard();
         }

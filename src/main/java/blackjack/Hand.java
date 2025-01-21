@@ -17,7 +17,7 @@ public class Hand {
     }
 
     /**
-     * Now made simple just sum up getValue() for all cards.
+     * sum up getValue() for all cards.
      */
     public int calculateScore() {
         int total = 0;

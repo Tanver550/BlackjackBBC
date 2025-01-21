@@ -34,6 +34,7 @@ class ConsoleIOTest {
         outContent.reset();
     }
 
+    // test if text can be printed
     @Test
     void testPrintAndPrintln() {
         consoleIO = new ConsoleIO();

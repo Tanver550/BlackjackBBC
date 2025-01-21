@@ -24,13 +24,14 @@ public class Card {
     }
 
     public int getValue() {
-        // If its an Ace and we have an override return that
+        // used to get the value of the ace if the user chooses 1 or 11
         if (rank == Rank.ACE && overrideValue != null) {
             return overrideValue;
         }
         return rank.getDefaultValue();
     }
 
+    // set the override value
     public void setOverrideValue(Integer overrideValue) {
         this.overrideValue = overrideValue;
     }

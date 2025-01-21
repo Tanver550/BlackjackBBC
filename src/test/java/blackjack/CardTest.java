@@ -15,12 +15,13 @@ public class CardTest {
 
         Card card = new Card(Rank.ACE, Suit.SPADES);
 
-        // Check rank suit nd initial value
+        // Check rank suit and initial value
         assertEquals(Rank.ACE, card.getRank());
         assertEquals(Suit.SPADES, card.getSuit());
         assertEquals(11, card.getValue());
     }
 
+    // correctly make a string, with the card deatails
     @Test
     void testCardToString() {
         Card card = new Card(Rank.KING, Suit.HEARTS);
